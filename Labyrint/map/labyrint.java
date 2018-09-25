@@ -19,16 +19,29 @@ public class labyrint extends Application {
 		Scene scene = new Scene(map, map.getWidth(), map.getHeight());
 
 		primaryStage.setScene(scene);
-		MapSolver(map.getStartY(), map.getStartX(), map);
+		MapSolver.MapSolver(map);
 		primaryStage.show();
 		
+		
+		AnimationTimer at = new AnimationTimer() {
+			long before = 0;
+			@Override
+			public void handle(long now) {
+				// TODO Auto-generated method stub
+				
+				if(now-before >=9_000_000) {
+					MapSolver.showNextPath();
+					before=now;
+				}
+				
+			}
+		};
+		
+		at.start();
 	}
 
 
-	private void MapSolver(int startY, int startX, Map map) {
-		// TODO Auto-generated method stub
-		//Temporär tills jag fattar hur jag kopplar Mapsolver till denna ;(
-	}
+
 
 
 	public static void main(String[] args) {

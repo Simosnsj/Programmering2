@@ -1,49 +1,117 @@
 package map;
 
+import java.util.ArrayList;
+
 import blocks.Block;
+import blocks.ClosedBlock;
+import blocks.GoalBlock;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class MapSolver extends Block {
+	static int x;
+	static int y;
+	static int steps;
+	static Map map;
+	static boolean win = false;
+	static ArrayList<Block> visitedblocks = new ArrayList<Block>();
+	static ArrayList<Node> path = new ArrayList<Node>();
 
-	int x;
-	int y;
-	public boolean MapSolver(int y, int x, Map map, boolean win) {
-		int radius = (int) (Block.SIZE/2);
+	public static void MapSolver(Map map) {
+
+		MapSolver.map = map;
+		x = map.getStartX();
+		y = map.getStartY();
+
+		/*int radius = (int) (Block.SIZE/2);
 		Circle cir = new Circle(Block.SIZE/2);
-		
 		cir.setFill(Color.YELLOWGREEN);
 		cir.setTranslateX(Block.SIZE*x + radius);
 		cir.setTranslateY(Block.SIZE*y - radius);
+		map.getChildren().add(cir);
+		gör x och y till start blockets koordinater*/
+
+
+		solve (x,y,1);
+		solve (x,y,2);
+		solve (x,y,3);
+		solve (x,y,4);
+
+
+	}
+	static int p = 0;	
+	public static void showNextPath() {
 		
-		this.getChildren().add(cir);
+		if(p<path.size()) {
+			
+			
+			map.getChildren().add(path.get(p));
+			p += 1;
+		}
+	}
+	
+	public static void solve(int x, int y, int dir){
+		Block b = map.getBlock(x, y);
+		if(visitedblocks.contains(b)){
+			return;}
+		visitedblocks.add(b);
+		if(win) return;
+		if(b instanceof ClosedBlock || b == null || win ) {
+			return;
+		}
+		if(b instanceof GoalBlock) {
+			win = true;
+			System.out.println("win!");
+			System.out.println(steps);;
+			return;
+		}
+		steps++;
+
+		//path.add(b);
 		
-		/* gör x och y till start blockets koordinater*/
-		return false;
+		int radius = (int) (Block.SIZE/2);
+		Circle cir = new Circle(Block.SIZE/2);
+		cir.setFill(Color.YELLOWGREEN);
+		cir.setTranslateX(Block.SIZE*x + radius);
+		cir.setTranslateY(Block.SIZE*y + radius);
+		path.add(cir);
+		
+		if(dir ==1) { // upp
+			System.out.println("upp");
+			solve(x, y-1, 1); //upp
+			solve(x+1, y, 2); //höger
+			solve(x-1, y, 4); //vänster
+
+
+		}
+		if(dir ==2) { // höger
+			System.out.println("höger");
+
+			solve(x+1, y, 2); //höger
+			solve(x, y-1, 1); //upp
+			solve(x, y+1, 3); //ner
+
+		}
+		if(dir ==3) { // ner
+			System.out.println("ner");
+			solve(x, y+1, 3); //ner
+			solve(x+1, y, 2); //höger
+			solve(x-1, y, 4); //vänster
+
+		}
+		if(dir ==4) { // vänster
+			System.out.println("vänster");
+			solve(x-1, y, 4); //vänster
+			solve(x, y-1, 1); //upp
+			solve(x, y+1, 3); //ner
+		}
+
+		if(!win) {
+			steps--;
+		}
+
 	}
 }
-
-/*
- * Måste hämta map från mainmetoden.
- * rekursivt genom att returna en metod som sean returnar en så sig själv.
- * 
- *Problem att koppla Mapsolver till application... minns inte alls...
- *
- *ifsatser 
- *
- * if(blocket du är på == goalblock){ return true;}
- * else if(blocket vänster == open){ flytta dit return mapsolver();}
- * else if( blocket upp == open){ flytta dit return mapsolver();}
- * else if(blocket höger == open){flytta dit return mapsolver();}
- * else if(blocket ner == open){flytta dit return mapsolver();}
- * 
- * minnes array
- * 
- * array<block> visited = new array<block>();
- * 
- * När man flyttar till ett nytt block läggs detta till i arrayen. ska förhindra att man fastnar i rum.
- * 
- * 
- * 
- * 
- */
