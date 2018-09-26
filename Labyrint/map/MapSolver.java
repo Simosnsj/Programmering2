@@ -26,15 +26,6 @@ public class MapSolver extends Block {
 		x = map.getStartX();
 		y = map.getStartY();
 
-		/*int radius = (int) (Block.SIZE/2);
-		Circle cir = new Circle(Block.SIZE/2);
-		cir.setFill(Color.YELLOWGREEN);
-		cir.setTranslateX(Block.SIZE*x + radius);
-		cir.setTranslateY(Block.SIZE*y - radius);
-		map.getChildren().add(cir);
-		gör x och y till start blockets koordinater*/
-
-
 		solve (x,y,1);
 		solve (x,y,2);
 		solve (x,y,3);
@@ -69,8 +60,6 @@ public class MapSolver extends Block {
 			return;
 		}
 		steps++;
-
-		//path.add(b);
 		
 		int radius = (int) (Block.SIZE/2);
 		Circle cir = new Circle(Block.SIZE/2);
@@ -80,7 +69,6 @@ public class MapSolver extends Block {
 		path.add(cir);
 		
 		if(dir ==1) { // upp
-			System.out.println("upp");
 			solve(x, y-1, 1); //upp
 			solve(x+1, y, 2); //höger
 			solve(x-1, y, 4); //vänster
@@ -88,22 +76,18 @@ public class MapSolver extends Block {
 
 		}
 		if(dir ==2) { // höger
-			System.out.println("höger");
-
 			solve(x+1, y, 2); //höger
 			solve(x, y-1, 1); //upp
 			solve(x, y+1, 3); //ner
 
 		}
 		if(dir ==3) { // ner
-			System.out.println("ner");
 			solve(x, y+1, 3); //ner
 			solve(x+1, y, 2); //höger
 			solve(x-1, y, 4); //vänster
 
 		}
 		if(dir ==4) { // vänster
-			System.out.println("vänster");
 			solve(x-1, y, 4); //vänster
 			solve(x, y-1, 1); //upp
 			solve(x, y+1, 3); //ner
@@ -111,6 +95,7 @@ public class MapSolver extends Block {
 
 		if(!win) {
 			steps--;
+			path.remove(cir); // ta bort om man vill se exakt hur den rör sig.
 		}
 
 	}

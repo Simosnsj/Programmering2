@@ -29,7 +29,7 @@ public class labyrint extends Application {
 			public void handle(long now) {
 				// TODO Auto-generated method stub
 				
-				if(now-before >=9_000_000) {
+				if(now-before >=19_000_000) {
 					MapSolver.showNextPath();
 					before=now;
 				}
